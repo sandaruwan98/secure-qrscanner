@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qrscanner/authentication_service.dart';
 import 'package:qrscanner/pages/homepage.dart';
+import 'package:qrscanner/pages/profilepage.dart';
+import 'package:qrscanner/pages/redirectPage.dart';
 import 'package:qrscanner/pages/signInpage.dart';
 
 Future<void> main() async {
@@ -52,9 +54,11 @@ class AuthenticationWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User?>();
 
     if (firebaseUser != null) {
-      return HomePage();
+      return ProfilePage();
     }
 
     return SignInPage();
+
+    // return RedirectPage();
   }
 }

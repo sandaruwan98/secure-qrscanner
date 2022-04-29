@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qrscanner/authentication_service.dart';
+import 'package:qrscanner/components/styles.dart';
 
 class SignUpPage extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
@@ -26,13 +27,11 @@ class SignUpPage extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(24.0)),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Color.fromARGB(255, 17, 17, 17), width: 1.0),
+                  borderSide: BorderSide(color: ktextBoxColor, width: 1.0),
                   borderRadius: BorderRadius.all(Radius.circular(24.0)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Color.fromARGB(255, 0, 0, 0), width: 2.0),
+                  borderSide: BorderSide(color: ktextBoxColor, width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(24.0)),
                 ),
               ),
@@ -50,13 +49,11 @@ class SignUpPage extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(24.0)),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Color.fromARGB(255, 17, 17, 17), width: 1.0),
+                  borderSide: BorderSide(color: ktextBoxColor, width: 1.0),
                   borderRadius: BorderRadius.all(Radius.circular(24.0)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Color.fromARGB(255, 0, 0, 0), width: 2.0),
+                  borderSide: BorderSide(color: ktextBoxColor, width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(24.0)),
                 ),
               ),
@@ -74,13 +71,11 @@ class SignUpPage extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(24.0)),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Color.fromARGB(255, 17, 17, 17), width: 1.0),
+                  borderSide: BorderSide(color: ktextBoxColor, width: 1.0),
                   borderRadius: BorderRadius.all(Radius.circular(24.0)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Color.fromARGB(255, 0, 0, 0), width: 2.0),
+                  borderSide: BorderSide(color: ktextBoxColor, width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(24.0)),
                 ),
               ),
@@ -91,7 +86,7 @@ class SignUpPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: Material(
-                color: Color.fromARGB(255, 63, 63, 63),
+                color: kseconBtnColor,
                 borderRadius: BorderRadius.all(Radius.circular(24.0)),
                 elevation: 5.0,
                 child: MaterialButton(
@@ -99,8 +94,10 @@ class SignUpPage extends StatelessWidget {
                     //Implement login functionality.
                     String? successText = await context
                         .read<AuthenticationService>()
-                        .signUp(emailController.text.trim(),
-                            passwordController.text.trim());
+                        .signUp(
+                            emailController.text.trim(),
+                            passwordController.text.trim(),
+                            nameController.text);
                     if (successText == "SignedUp") {
                       Navigator.pop(context);
                     }
