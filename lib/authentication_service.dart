@@ -5,7 +5,7 @@ class AuthenticationService {
 
   AuthenticationService(this._firebaseAuth);
 
-  Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
+  Stream<User?> get authStateChanges => _firebaseAuth.userChanges();
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
@@ -17,17 +17,39 @@ class AuthenticationService {
           email: email, password: password);
       return "SignedIn";
     } on FirebaseAuthException catch (e) {
-      return e.message;
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+      print(e.message);
+      return e.code;
     }
   }
 
-  Future<String?> signUp(String email, String password) async {
+  Future<String?> signUp(String email, String password, String name) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      UserCredential usercred = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      await usercred.user?.updateDisplayName("sdfsdf");
+
       return "SignedUp";
     } on FirebaseAuthException catch (e) {
-      return e.message;
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+      print(e.message);
+      return e.code;
+    }
+  }
+
+  Future<void> updateName(String name) async {
+    try {
+      await _firebaseAuth.currentUser?.updateDisplayName(name);
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
     }
   }
 }
