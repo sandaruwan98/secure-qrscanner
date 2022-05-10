@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qrscanner/components/utils.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);
@@ -15,11 +16,7 @@ class AboutPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [],
       ),
-      floatingActionButton: FloatingActionButton.large(
-        tooltip: "Scan QR code",
-        onPressed: (() {}),
-        child: Icon(Icons.fact_check),
-      ),
+      floatingActionButton: floatBtn(context),
     );
   }
 }

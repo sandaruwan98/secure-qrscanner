@@ -19,3 +19,47 @@ const TextStyle kTxtStyleCommDisp = TextStyle(fontSize: 20);
 
 const TextStyle kTxtStyleRedirectTitle =
     TextStyle(fontSize: 30, fontWeight: FontWeight.w900);
+
+const TextStyle kTxtStyleReidLink =
+    TextStyle(fontSize: 18, color: Colors.blue, fontStyle: FontStyle.italic);
+
+const TextStyle kTxtStyleReidLoading =
+    TextStyle(fontSize: 20, fontWeight: FontWeight.w300);
+const TextStyle kTxtStyleReidSafe = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w900,
+    color: Color.fromARGB(255, 27, 94, 32));
+
+const InputDecoration kinputDecComUrl = InputDecoration(
+  hintText: "Add your URL",
+  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+  ),
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: ktextBoxColor, width: 1.0),
+    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: ktextBoxColor, width: 2.0),
+    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+  ),
+);
+
+const InputDecoration kinputDecComres = InputDecoration(
+  hintText: "Reason",
+  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+  ),
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: ktextBoxColor, width: 1.0),
+    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: ktextBoxColor, width: 2.0),
+    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+  ),
+);
+
+enum RedirectState { loading, secure, notsecure }

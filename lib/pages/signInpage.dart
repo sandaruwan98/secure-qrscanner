@@ -69,12 +69,17 @@ class SignInPage extends StatelessWidget {
                 btnColor: kseconBtnColor,
                 textColor: Colors.white,
                 radius: 24,
-                onTap: () {
+                onTap: () async {
                   //Implement login functionality.
 
-                  context.read<AuthenticationService>().signIn(
-                      emailController.text.trim(),
-                      passwordController.text.trim());
+                  String? message = await context
+                      .read<AuthenticationService>()
+                      .signIn(emailController.text.trim(),
+                          passwordController.text.trim());
+                  if (message != null) {
+                    final snackBar = SnackBar(content: Text(message));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
                 },
               ),
             ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qrscanner/components/navigationdrawer.dart';
+import 'package:qrscanner/components/styles.dart';
+import 'package:qrscanner/components/utils.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,17 +15,17 @@ class HomePage extends StatelessWidget {
       drawer: NavigationDrawer(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.max,
         children: [
-          Text("signed in"),
+          Text(
+            "Welcome to Secure QR scanner",
+            style: kTxtStyleRedirectTitle,
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.large(
-        tooltip: "Scan QR code",
-        onPressed: (() {}),
-        child: Icon(Icons.fact_check),
-      ),
+      floatingActionButton: floatBtn(context),
     );
   }
 }

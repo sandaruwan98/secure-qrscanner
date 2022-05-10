@@ -98,8 +98,18 @@ class SignUpPage extends StatelessWidget {
                             emailController.text.trim(),
                             passwordController.text.trim(),
                             nameController.text);
+
                     if (successText == "SignedUp") {
                       Navigator.pop(context);
+                    } else {
+                      String? message = await context
+                          .read<AuthenticationService>()
+                          .signIn(emailController.text.trim(),
+                              passwordController.text.trim());
+                      if (message != null) {
+                        final snackBar = SnackBar(content: Text(message));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
                     }
                   },
                   minWidth: 200.0,

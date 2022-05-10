@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qrscanner/authentication_service.dart';
+import 'package:qrscanner/pages/communitypage.dart';
 import 'package:qrscanner/pages/homepage.dart';
 import 'package:qrscanner/pages/profilepage.dart';
 import 'package:qrscanner/pages/redirectPage.dart';
@@ -11,6 +12,7 @@ import 'package:qrscanner/pages/signInpage.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
+    // name: 'qrscanner',
     options: FirebaseOptions(
         apiKey: "AIzaSyBHdD4NQ6GszLd5hjAvVsweccse7iELTmQ",
         authDomain: "qrsacanner.firebaseapp.com",
@@ -54,7 +56,8 @@ class AuthenticationWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User?>();
 
     if (firebaseUser != null) {
-      return ProfilePage();
+      return HomePage();
+      // return RedirectPage(url: "https://stackoverflow.com/");
     }
 
     return SignInPage();

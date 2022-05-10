@@ -17,13 +17,12 @@ class AuthenticationService {
           email: email, password: password);
       return "SignedIn";
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      }
-      print(e.message);
-      return e.code;
+      // if (e.code == 'user-not-found') {
+      //   return 'No user found for that email.';
+      // } else if (e.code == 'wrong-password') {
+      //   return "Wrong password provided for that user.";
+      // }
+      return e.message;
     }
   }
 
@@ -41,7 +40,7 @@ class AuthenticationService {
         print('The account already exists for that email.');
       }
       print(e.message);
-      return e.code;
+      return e.message;
     }
   }
 
