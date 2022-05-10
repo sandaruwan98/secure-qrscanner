@@ -12,7 +12,7 @@ import 'package:qrscanner/pages/signInpage.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    // name: 'qrscanner',
+    name: 'qrscanner',
     options: FirebaseOptions(
         apiKey: "AIzaSyBHdD4NQ6GszLd5hjAvVsweccse7iELTmQ",
         authDomain: "qrsacanner.firebaseapp.com",

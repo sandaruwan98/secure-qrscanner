@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/single_child_widget.dart';
 import 'package:qrscanner/components/button.dart';
 import 'package:qrscanner/components/styles.dart';
 import 'package:http/http.dart' as http;
 import 'package:qrscanner/components/utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RedirectPage extends StatefulWidget {
   final String url;
@@ -16,7 +18,8 @@ class RedirectPage extends StatefulWidget {
 class _RedirectPageState extends State<RedirectPage> {
   RedirectState redirectState = RedirectState.loading;
   var commRecords = <String>[];
-  String googleRecords = '';
+  var googleRecords = <String>[];
+
   @override
   initState() {
     super.initState();
@@ -37,9 +40,8 @@ class _RedirectPageState extends State<RedirectPage> {
       if (res.body.trim() == '{}' && communityRecords.length == 0) {
         redirectState = RedirectState.secure;
       } else {
-        if (res.body.trim() == '{}') {
-          googleRecords =
-              'This website is not recorded as a Malicious website in official records';
+        if (res.body.trim() != '{}') {
+          googleRecords.add("Malware");
         }
 
         redirectState = RedirectState.notsecure;
@@ -80,39 +82,74 @@ class _RedirectPageState extends State<RedirectPage> {
           ),
         );
     Widget buildNonSafe(BuildContext context) => Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text("This URL Contains :", textAlign: TextAlign.left),
-              SizedBox(
-                height: 10.0,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    border: Border.all(color: Colors.black)),
-                height: 100,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Warning!",
-                        textAlign: TextAlign.left,
-                        style: kTxtStyleCommWarn,
-                      ),
-                      Text("This is Malicious a Website",
-                          style: kTxtStyleCommWarn, textAlign: TextAlign.left),
-                      Column(
-                        children:
-                            commRecords.map((reason) => Text(reason)).toList(),
-                      )
-                    ],
+          child: SingleChildScrollView(
+            child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text("This URL Contains :", textAlign: TextAlign.left),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      border: Border.all(color: Colors.black)),
+                  // height: 300,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Wrap(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Warning!",
+                          textAlign: TextAlign.left,
+                          style: kTxtStyleCommWarn,
+                        ),
+                        SizedBox(height: 10),
+                        googleRecords.length == 0
+                            ? Text(
+                                "This website is not recorded as a Malicious website in official records but there are malicious records added by our Community members",
+                                style: kTxtStyleCommyellow,
+                                textAlign: TextAlign.left)
+                            : Text("This is Malicious a Website",
+                                style: kTxtStyleCommWarn,
+                                textAlign: TextAlign.left),
+                        Divider(),
+                        Text("Records from Community",
+                            textAlign: TextAlign.left,
+                            style: kTxtStyleNotsafeCommTitle),
+                        SizedBox(height: 10),
+                        commRecords.length != 0
+                            ? Wrap(
+                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                children: commRecords
+                                    .map(
+                                      (reason) => Container(
+                                          decoration: BoxDecoration(
+                                              color: Color.fromARGB(
+                                                  255, 218, 69, 58),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)),
+                                              border: Border.all(
+                                                  color: Colors.grey)),
+                                          margin: EdgeInsets.only(bottom: 10),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(reason,
+                                                style: kTxtStyleCommWarn2,
+                                                overflow: TextOverflow.fade,
+                                                textAlign: TextAlign.left),
+                                          )),
+                                    )
+                                    .toList(),
+                              )
+                            : Text("There's no records")
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
 
@@ -163,7 +200,15 @@ class _RedirectPageState extends State<RedirectPage> {
                     textColor: Colors.white,
                     radius: 24,
                     minWidth: 150,
-                    onTap: () {},
+                    onTap: () async {
+                      final Uri _url = Uri.parse(widget.url);
+                      if (await canLaunchUrl(_url)) {
+                        await launchUrl(_url,
+                            mode: LaunchMode.externalApplication);
+                      } else {
+                        throw 'Could not launch $_url';
+                      }
+                    },
                   ),
                   MButton(
                     text: "Decline",
@@ -171,7 +216,9 @@ class _RedirectPageState extends State<RedirectPage> {
                     textColor: Colors.white,
                     radius: 24,
                     minWidth: 150,
-                    onTap: () async {},
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               )
