@@ -15,8 +15,19 @@ const TextStyle kTxtStyleProfilesignin =
 
 const TextStyle kTxtStyleCommWarn = TextStyle(fontSize: 17, color: Colors.red);
 
+const TextStyle kTxtStyleCommbb =
+    TextStyle(fontSize: 17, color: Color.fromARGB(255, 105, 32, 27));
+
+const TextStyle kTxtStyleCommWarntitle =
+    TextStyle(fontSize: 20, color: Colors.red, fontWeight: FontWeight.bold);
+const TextStyle kTxtStyleCommWarntitle1 =
+    TextStyle(fontSize: 20, color: Colors.red);
+
 const TextStyle kTxtStyleCommWarn2 =
     TextStyle(fontSize: 17, color: Colors.white);
+
+const TextStyle kTxtStyleCommWarn3 =
+    TextStyle(fontSize: 15, color: Colors.white);
 
 const TextStyle kTxtStyleNotsafeCommTitle =
     TextStyle(fontSize: 19, color: Colors.black);

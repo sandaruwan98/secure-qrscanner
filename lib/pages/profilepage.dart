@@ -5,6 +5,7 @@ import 'package:qrscanner/components/navigationdrawer.dart';
 import 'package:qrscanner/components/styles.dart';
 import 'package:provider/provider.dart';
 import 'package:qrscanner/components/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -17,6 +18,21 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController nameController = TextEditingController();
   String name = "Name";
   String email = "Email";
+  // bool commMember = false;
+
+  @override
+  initState() {
+    super.initState();
+
+    setCommMembership();
+  }
+
+  Future<void> setCommMembership() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _switchValue = prefs.getBool('communitymember') ?? false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +49,21 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: Text("Profile"),
       ),
-      drawer: NavigationDrawer(),
+      drawer: navigationDrawer(context),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(height: 100),
-            CircleAvatar(
-              radius: 60,
-              backgroundColor: Colors.black12,
+            // CircleAvatar(
+            //   radius: 60,
+            //   backgroundColor: Colors.black12,
+
+            // ),
+            Image.asset(
+              'assets/images/avatar.png',
+              width: 150,
+              height: 150,
             ),
             SizedBox(
               height: 20,
@@ -172,10 +194,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 Text("Join The Community Program"),
                 Switch(
                     value: _switchValue,
-                    onChanged: (val) {
+                    onChanged: (val) async {
                       setState(() {
                         _switchValue = val;
                       });
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setBool('communitymember', val);
                     })
               ],
             ),

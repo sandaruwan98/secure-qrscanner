@@ -35,16 +35,29 @@ dependencies:
   http: ^0.13.4
   flutter_barcode_scanner: ^2.0.0
   url_launcher: ^6.1.0
+  any_link_preview: ^2.0.7
+  shared_preferences: ^2.0.14
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.9.2"
+
+flutter_icons:
+  android: "launcher_icon"
+  # ios: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/icon/iconfor.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
+  assets:
+        - assets/images/logo.png
+        - assets/images/avatar.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

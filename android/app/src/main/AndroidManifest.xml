@@ -30,8 +30,8 @@
 
 
    <application
-        android:label="qrscanner"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Secure QR Code scanner"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

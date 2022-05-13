@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:any_link_preview/any_link_preview.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/single_child_widget.dart';
@@ -32,7 +35,7 @@ class _RedirectPageState extends State<RedirectPage> {
     print(res.body);
     List<QueryDocumentSnapshot<Map<String, dynamic>>> communityRecords =
         await checkCommunityRecords(widget.url);
-    print(communityRecords.length);
+    // print(communityRecords.length);
     //  print(communityRecords[0].data().toString());
     Iterable<String> temp = communityRecords.map((doc) => doc.data()['reason']);
     print(temp.toList());
@@ -41,7 +44,14 @@ class _RedirectPageState extends State<RedirectPage> {
         redirectState = RedirectState.secure;
       } else {
         if (res.body.trim() != '{}') {
-          googleRecords.add("Malware");
+          print(res.body);
+          var jsondata = jsonDecode(res.body);
+          List<dynamic> threatArray = jsondata['matches'];
+          Iterable<String> threatArrayMapped =
+              threatArray.map((e) => e['threatType']);
+          print(threatArrayMapped.toList());
+
+          googleRecords = threatArrayMapped.toList();
         }
 
         redirectState = RedirectState.notsecure;
@@ -86,7 +96,7 @@ class _RedirectPageState extends State<RedirectPage> {
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text("This URL Contains :", textAlign: TextAlign.left),
+                // Text("This URL Contains :", textAlign: TextAlign.left),
                 SizedBox(
                   height: 10.0,
                 ),
@@ -103,7 +113,7 @@ class _RedirectPageState extends State<RedirectPage> {
                         Text(
                           "Warning!",
                           textAlign: TextAlign.left,
-                          style: kTxtStyleCommWarn,
+                          style: kTxtStyleCommWarntitle,
                         ),
                         SizedBox(height: 10),
                         googleRecords.length == 0
@@ -111,14 +121,49 @@ class _RedirectPageState extends State<RedirectPage> {
                                 "This website is not recorded as a Malicious website in official records but there are malicious records added by our Community members",
                                 style: kTxtStyleCommyellow,
                                 textAlign: TextAlign.left)
-                            : Text("This is Malicious a Website",
-                                style: kTxtStyleCommWarn,
-                                textAlign: TextAlign.left),
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("This is Malicious a Website",
+                                      style: kTxtStyleCommWarntitle1,
+                                      textAlign: TextAlign.left),
+                                  SizedBox(height: 10),
+                                  Text("This website is marked as ",
+                                      style: kTxtStyleCommbb,
+                                      textAlign: TextAlign.left),
+                                  Wrap(
+                                    // crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: googleRecords
+                                        .map(
+                                          (reason) => Container(
+                                              decoration: BoxDecoration(
+                                                  color: Color.fromARGB(
+                                                      255, 105, 32, 27),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(10)),
+                                                  border: Border.all(
+                                                      color: Colors.grey)),
+                                              margin:
+                                                  EdgeInsets.only(bottom: 5),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: Text(reason,
+                                                    style: kTxtStyleCommWarn3,
+                                                    overflow: TextOverflow.fade,
+                                                    textAlign: TextAlign.left),
+                                              )),
+                                        )
+                                        .toList(),
+                                  )
+                                ],
+                              ),
                         Divider(),
                         Text("Records from Community",
                             textAlign: TextAlign.left,
                             style: kTxtStyleNotsafeCommTitle),
-                        SizedBox(height: 10),
+                        SizedBox(height: 25),
                         commRecords.length != 0
                             ? Wrap(
                                 // crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,14 +203,14 @@ class _RedirectPageState extends State<RedirectPage> {
           title: Text(""),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(44.0),
+          padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text("You are about to redirect into this website?",
                   textAlign: TextAlign.center, style: kTxtStyleRedirectTitle),
               SizedBox(
-                height: 30.0,
+                height: 10.0,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -181,7 +226,44 @@ class _RedirectPageState extends State<RedirectPage> {
                 ),
               ),
               SizedBox(
-                height: 30.0,
+                height: 15.0,
+              ),
+
+              AnyLinkPreview(
+                link: widget.url,
+                displayDirection: uiDirection.uiDirectionHorizontal,
+                cache: Duration(hours: 1),
+                backgroundColor: Colors.grey[300],
+                errorWidget: Container(
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 224, 224, 224),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    // border: Border.all(color: Colors.black)
+                  ),
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.info_outline),
+                      SizedBox(width: 5),
+                      Text('Failed load preview of the URL'),
+                    ],
+                  ),
+                ),
+                // errorImage: _errorImage,
+              ),
+              // MButton(
+              //   text: "Preview WebSite",
+              //   btnColor: Color.fromARGB(255, 51, 50, 49),
+              //   textColor: Colors.white,
+              //   radius: 10,
+              //   // minWidth: 150,
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //   },
+              // ),
+              SizedBox(
+                height: 15.0,
               ),
               redirectState == RedirectState.loading
                   ? buildLoading(context)
@@ -198,7 +280,7 @@ class _RedirectPageState extends State<RedirectPage> {
                     text: "Accept",
                     btnColor: Colors.green,
                     textColor: Colors.white,
-                    radius: 24,
+                    radius: 10,
                     minWidth: 150,
                     onTap: () async {
                       final Uri _url = Uri.parse(widget.url);
@@ -214,7 +296,7 @@ class _RedirectPageState extends State<RedirectPage> {
                     text: "Decline",
                     btnColor: Colors.red,
                     textColor: Colors.white,
-                    radius: 24,
+                    radius: 10,
                     minWidth: 150,
                     onTap: () {
                       Navigator.pop(context);

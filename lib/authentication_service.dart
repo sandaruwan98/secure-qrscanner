@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
@@ -15,7 +16,7 @@ class AuthenticationService {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      return "SignedIn";
+      return "success";
     } on FirebaseAuthException catch (e) {
       // if (e.code == 'user-not-found') {
       //   return 'No user found for that email.';
@@ -30,16 +31,20 @@ class AuthenticationService {
     try {
       UserCredential usercred = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
-      await usercred.user?.updateDisplayName("sdfsdf");
+      await usercred.user?.updateDisplayName(name);
 
-      return "SignedUp";
+      // return "Signed up successfully";
+      return "success";
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
-      print(e.message);
+      // if (e.code == 'weak-password') {
+      //   print('The password provided is too weak.');
+      // } else if (e.code == 'email-already-in-use') {
+      //   print('The account already exists for that email.');
+      // }
+
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setBool('communitymember', false);
+
       return e.message;
     }
   }

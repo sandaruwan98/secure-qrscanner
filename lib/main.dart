@@ -3,10 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qrscanner/authentication_service.dart';
-import 'package:qrscanner/pages/communitypage.dart';
 import 'package:qrscanner/pages/homepage.dart';
-import 'package:qrscanner/pages/profilepage.dart';
-import 'package:qrscanner/pages/redirectPage.dart';
 import 'package:qrscanner/pages/signInpage.dart';
 
 Future<void> main() async {
@@ -48,9 +45,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AuthenticationWrapper extends StatelessWidget {
+class AuthenticationWrapper extends StatefulWidget {
   const AuthenticationWrapper({Key? key}) : super(key: key);
 
+  @override
+  State<AuthenticationWrapper> createState() => _AuthenticationWrapperState();
+}
+
+class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User?>();
