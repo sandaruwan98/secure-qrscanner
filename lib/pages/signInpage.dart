@@ -55,6 +55,7 @@ class SignInPage extends StatelessWidget {
                   height: 8.0,
                 ),
                 TextField(
+                  obscureText: true,
                   controller: passwordController,
                   decoration: InputDecoration(
                     hintText: 'Enter your password',

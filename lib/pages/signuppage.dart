@@ -76,6 +76,7 @@ class SignUpPage extends StatelessWidget {
                   height: 8.0,
                 ),
                 TextField(
+                  obscureText: true,
                   controller: passwordController,
                   decoration: InputDecoration(
                     hintText: 'Enter new password',
@@ -120,6 +121,7 @@ class SignUpPage extends StatelessWidget {
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
 
+                        Navigator.pop(context);
                         // if (successText == 'success') {
                         //   Navigator.pushReplacement(
                         //       context,
